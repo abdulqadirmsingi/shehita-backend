@@ -9,3 +9,5 @@ class User(AbstractUser):
     username = models.CharField(unique=True, max_length=255)
     password = models.CharField(max_length = 255)
     
+    def __str__(self) -> str:
+        return self.username
