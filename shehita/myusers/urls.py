@@ -1,11 +1,5 @@
 from django.urls import path
-from django.views.generic import TemplateView
-# from .views import CustomTokenObtainPairView
-from rest_framework_simplejwt import views as jwt_views
+from django.urls import re_path
+from .views import *
 
-urlpatterns = [
-    # path('login/', CustomTokenObtainPairView.as_view(), name='login'),
-    path('refresh/', jwt_views.TokenRefreshView.as_view(), name='refresh'),
-    
 
-]

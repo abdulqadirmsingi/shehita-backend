@@ -9,6 +9,8 @@ from rest_framework.mixins import CreateModelMixin,\
     RetrieveModelMixin,\
     DestroyModelMixin
 
+
+
 # from store.permission import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
 # Create your views here.
@@ -84,6 +86,7 @@ class OrderViewSet(ModelViewSet):
         serializer = CreateOrderSerializer(data=request.data, context={
                                            'user_id': self.request.user.id})
         serializer.is_valid(raise_exception=True)
+        print(self.request.user)
         order = serializer.save()
         serializer = OrderSerializer(order)
         return Response(serializer.data)
