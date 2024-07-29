@@ -1,4 +1,7 @@
-create a virtual environment and inside it clone the repository
+Install python in your PC https://www.python.org/downloads/windows/
+create a virtual environment using the command: python -m venv .venv
+
+and inside it clone the repository
 cd shehita-backend/
 pip install -r requirements.txt
 cd shehita/
