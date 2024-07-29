@@ -1,17 +1,17 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from .serializers import *
 from .models import *
+from .permissions import *
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.mixins import CreateModelMixin,\
     RetrieveModelMixin,\
     DestroyModelMixin
 
 
 
-# from store.permission import IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
 # Create your views here.
 
@@ -21,8 +21,19 @@ class CategoryViewset(ModelViewSet):
 
 
 class ProductViewset(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related('images').all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    search_fields = ['title', 'description']
+    ordering_fields = ['unit_price', 'last_update']
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def destroy(self, request, *args, **kwargs):
+        if OrderItem.objects.filter(product_id=kwargs['pk']).count() > 0:
+            return Response({'error': 'Product Can Not Be Deleted Because It Is Associated With An Order Item'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return super().destroy(request, *args, **kwargs)
 
 class CartViewSet(CreateModelMixin,
                   RetrieveModelMixin,
@@ -62,6 +73,7 @@ class CustomerViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
+        print(self.request.user)
         customer = Customer.objects.get(
             user_id=request.user.id)
         if request.method == "GET":

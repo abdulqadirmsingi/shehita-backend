@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'drf_spectacular',
     'djoser',
     'myusers',
     'shehitaa'
@@ -142,6 +143,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : [
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
 }
 
 SIMPLE_JWT = {
@@ -154,4 +157,11 @@ DJOSER = {
         'user_create': 'myusers.serializers.CreateUserSerializer',
         'current_user': 'myusers.serializers.CurrentUserSerializer',
     },
+}
+
+SPECTACULAR_SETTINGS = {
+"TITLE": "Shehita ecommerce",
+"DESCRIPTION": "we make trading easy",
+"VERSION": "1.0.0",
+# OTHER SETTINGS
 }

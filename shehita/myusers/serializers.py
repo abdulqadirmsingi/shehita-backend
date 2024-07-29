@@ -24,10 +24,12 @@ class CurrentUserSerializer(UserSerializer):
         fields = ['id','first_name','last_name','username','email']
 
 
-#  {
-#   "first_name": "john",
-#   "last_name": "doe",
-#   "username": "john_doe",
-#   "password": "securePassword123",
-#   "email": "john.doe@example.com"
+
+
+# {
+#     "first_name": "awadh",
+#     "last_name": "sadi",
+#     "username": "sheymax",
+#     "password": "securePassword123",
+#     "email": "awadh@gmail.com"
 # }
