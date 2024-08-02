@@ -21,11 +21,11 @@ class CategoryViewset(ModelViewSet):
 
 
 class ProductViewset(ModelViewSet):
-    queryset = Product.objects.prefetch_related('images').all()
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
     search_fields = ['title', 'description']
-    ordering_fields = ['unit_price', 'last_update']
+    ordering_fields = ['price', 'last_update']
 
     def get_serializer_context(self):
         return {'request': self.request}

@@ -17,7 +17,6 @@ class ProductSerializer(serializers.ModelSerializer):
                   "description",
                   "price",
                   "stock",
-                  "available",
                   "image",
                   "created",
                   "updated"]
@@ -34,7 +33,7 @@ class CartItemSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
 
     def get_total_price(self, cart_item: CartItem):
-        return cart_item.quantity * cart_item.product.unit_price
+        return cart_item.quantity * cart_item.product.price
 
     class Meta:
         model = CartItem
@@ -47,7 +46,8 @@ class CartSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
 
     def get_total_price(self, cart):
-        return sum([item.quantity * item.product.unit_price for item in cart.items.all()])
+        return sum([item.quantity * item.product.price for item in cart.items.all()])
+
 
     class Meta:
         model = Cart
@@ -122,7 +122,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.Serializer):
-    cart_id = serializers.UUIDField()
+    cart_id = serializers.IntegerField()
 
     def validate_cart_id(self, cart_id):
         if not Cart.objects.filter(pk=cart_id).exists():
@@ -147,10 +147,11 @@ class CreateOrderSerializer(serializers.Serializer):
                 OrderItem(
                     order=order,
                     product=item.product,
-                    unit_price=item.product.unit_price,
+                    price=item.product.price,
                     quantity=item.quantity
                 ) for item in cart_items
             ]
+            
             OrderItem.objects.bulk_create(order_items)
 
             Cart.objects.filter(pk=cart_id).delete()
